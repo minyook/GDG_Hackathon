@@ -36,12 +36,21 @@ const ResultSection = ({ result, onReset }) => {
         </h2>
 
         <div className="flex flex-col items-center space-y-12">
-          {/* 이미지 미리보기 (상단 고정) */}
-          {result.imageUrl && (
-            <div className="w-56 h-56 md:w-80 md:h-80 flex-shrink-0 rounded-2xl overflow-hidden border-2 border-purple-500/30 shadow-[0_0_40px_rgba(168,85,247,0.4)] transform hover:scale-105 transition-transform duration-700">
-              <img src={result.imageUrl} alt="제물의 형상" className="w-full h-full object-cover" />
-            </div>
-          )}
+          {/* 이미지 미리보기 (상단 고정, 궁합 대응) */}
+          <div className="flex flex-wrap justify-center gap-6">
+            {(result.imageUrls || [result.imageUrl]).map((url, idx) => (
+              url && (
+                <div key={idx} className="w-48 h-48 md:w-64 md:h-64 flex-shrink-0 rounded-2xl overflow-hidden border-2 border-purple-500/30 shadow-[0_0_30px_rgba(168,85,247,0.3)] transform hover:scale-105 transition-transform duration-700 relative">
+                  <img src={url} alt={`제물 ${idx + 1}`} className="w-full h-full object-cover" />
+                  {result.imageUrls?.length > 1 && (
+                    <div className="absolute top-2 left-2 px-2 py-0.5 bg-black/60 backdrop-blur-md rounded text-[10px] text-purple-300 font-bold border border-purple-500/30">
+                      기운 {idx + 1}
+                    </div>
+                  )}
+                </div>
+              )
+            ))}
+          </div>
 
           {/* 분석 텍스트 (하단 배치, 줄바꿈 유지) */}
           <div className="w-full min-h-[200px] px-2">

@@ -24,29 +24,27 @@ const Home = () => {
   const handleAnalysis = async (payload) => {
     setAppState('loading');
     
-    // 이미지 로컬 미리보기 생성 (DB 저장 및 결과창 확인용)
-    let imageUrl = "";
-    if (payload.images && payload.images[0]) {
-      imageUrl = URL.createObjectURL(payload.images[0]);
+    // 이미지 로컬 미리보기 생성 (궁합인 경우 여러 장 처리)
+    let imageUrls = [];
+    if (payload.images && payload.images.length > 0) {
+      imageUrls = payload.images.map(img => img ? URL.createObjectURL(img) : null).filter(Boolean);
     }
 
     try {
       const response = await analyzeFate(payload);
       
-      // 궁합 분석인 경우 아이템 이름을 자동으로 생성
       const isCompatibility = payload.images && payload.images.length > 1;
       const detectedName = isCompatibility 
         ? "운명적 궁합 분석 (두 기운의 만남)" 
         : (payload.itemName || "이름 없는 제물");
 
-      // 결과 데이터 구조화
       const analysisData = {
         fate: response.result_text,
         fortune_score: response.fortune_score,
         lucky_color: response.lucky_color,
         lucky_item: response.lucky_item,
-        imageUrl: imageUrl,
-        itemName: detectedName // 아이템 이름 추가
+        imageUrls: imageUrls, // 배열로 변경
+        itemName: detectedName
       };
       
       setResult(analysisData);
