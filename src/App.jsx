@@ -1,53 +1,63 @@
-import React, { useState } from 'react';
-import Header from './components/Header';
-import UploadZone from './components/UploadZone';
-import LoadingState from './components/LoadingState';
-import ResultSection from './components/ResultSection';
-import Footer from './components/Footer';
-
-const results = [
-  "허허... 이 텀블러, 전생에 만주벌판을 달리던 장군님의 물그릇이었구먼. 겉은 차가운 스테인리스나 속은 뜨거운 열정을 품었으니, 뜨거운 아메리카노만 담기길 원하고 있어. 하지만 조심하게, 이번 달에는 바닥으로 추락할 낙마(落馬)의 살이 끼어있으니 컵홀더를 꼭 챙기게나.",
-  "이 사과 꽁다리를 보아하니... 태생부터 비범하군. 비록 지금은 앙상하게 뼈대만 남았으나, 그 과육은 수많은 이들에게 기쁨을 주었소. 관상학적으로 꼭대기의 꼭지가 길게 뻗은 것이 장수할 팔자였으나 인간의 식탐을 이기지 못했구먼. 다음 생엔 거대한 사과나무 숲의 주인이 될 것이야.",
-  "자네의 마우스... 참으로 기구한 팔자로다. 하루 수만 번의 클릭질에 손가락의 기운이 억눌려 있구먼. 왼쪽 버튼의 마모도를 보니 참을성이 대단한 성격이야. 하지만 밤마다 휠을 굴리는 소리에 외로움이 묻어나는군. 가끔은 마우스 패드 위에서 휴식을 주어야 큰 고장을 면할 것이야."
-];
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar.jsx';
+import Footer from './components/Footer.jsx';
+import Home from './pages/Home.jsx';
+import LoginPage from './pages/LoginPage.jsx';
+import SignupPage from './pages/SignupPage.jsx';
+import MyPage from './pages/MyPage.jsx';
 
 function App() {
-  const [appState, setAppState] = useState('idle'); // 'idle', 'loading', 'result'
-  const [result, setResult] = useState('');
-
-  const handleUpload = () => {
-    setAppState('loading');
-    // 실제 환경에서는 여기서 FastAPI 서버로 이미지를 전송하고 결과를 받아올 예정입니다.
-    setTimeout(() => {
-      const randomResult = results[Math.floor(Math.random() * results.length)];
-      setResult(randomResult);
-      setAppState('result');
-    }, 5000);
-  };
-
-  const handleReset = () => {
-    setAppState('idle');
-    setResult('');
-  };
-
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 overflow-hidden relative">
-      {/* 배경 장식 */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-20">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-600 rounded-full blur-[120px]"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-yellow-900 rounded-full blur-[120px]"></div>
+    <Router>
+      <div className="min-h-screen flex flex-col items-center justify-center p-6 overflow-hidden relative bg-[#050208]">
+        {/* 배경 이미지 및 장식 (전역 유지) */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div 
+            className="absolute inset-0 opacity-40 bg-cover bg-center bg-no-repeat grayscale-[0.5] contrast-[1.2]"
+            style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=2070&auto=format&fit=crop")' }}
+          ></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-[#050208]/80 via-transparent to-[#050208]"></div>
+          
+          {/* 회전하는 마법진 */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] opacity-20">
+            <svg viewBox="0 0 200 200" className="w-full h-full animate-spin-slow text-yellow-600/50" fill="none" stroke="currentColor">
+              <circle cx="100" cy="100" r="90" strokeWidth="0.5" strokeDasharray="1 2" />
+              <circle cx="100" cy="100" r="70" strokeWidth="0.5" />
+              <path d="M100 10 L100 190 M10 100 L190 100 M36.4 36.4 L163.6 163.6 M36.4 163.6 L163.6 36.4" strokeWidth="0.5" />
+              <rect x="50" y="50" width="100" height="100" strokeWidth="0.5" transform="rotate(45 100 100)" />
+            </svg>
+          </div>
+
+          {/* 떠다니는 입자 */}
+          {[...Array(20)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute bg-yellow-200/30 rounded-full blur-[2px] animate-float-particle"
+              style={{
+                width: `${Math.random() * 4 + 1}px`,
+                height: `${Math.random() * 4 + 1}px`,
+                left: `${Math.random() * 100}%`,
+                bottom: `-20px`,
+                animationDuration: `${Math.random() * 15 + 10}s`,
+                animationDelay: `${Math.random() * 5}s`,
+              }}
+            />
+          ))}
+        </div>
+
+        <Navbar />
+
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/mypage" element={<MyPage />} />
+        </Routes>
+
+        <Footer />
       </div>
-
-      <Header minimized={appState !== 'idle'} />
-
-      <main className="w-full max-w-2xl z-10 flex flex-col items-center">
-        {appState === 'idle' && <UploadZone onUpload={handleUpload} />}
-        {appState === 'loading' && <LoadingState />}
-        {appState === 'result' && <ResultSection result={result} onReset={handleReset} />}
-      </main>
-
-      <Footer />
-    </div>
+    </Router>
   );
 }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTypewriter } from '../hooks/useTypewriter';
+import { useTypewriter } from '../hooks/useTypewriter.js';
 
 const ResultSection = ({ result, onReset }) => {
   const typedResult = useTypewriter(result, 50);

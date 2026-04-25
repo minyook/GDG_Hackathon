@@ -18,6 +18,20 @@
   50% { box-shadow: 0 0 30px rgba(168, 85, 247, 0.8); }
 }
 
+@keyframes float-particle {
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  50% { opacity: 0.5; }
+  100% { transform: translateY(-100vh) translateX(20px); opacity: 0; }
+}
+
+.animate-float-particle {
+  animation: float-particle 10s linear infinite;
+}
+
+.bg-shaman-gradient {
+  background: radial-gradient(circle at center, #1a0b2e 0%, #0a0a0a 100%);
+}
+
 .animate-float {
   animation: float 3s ease-in-out infinite;
 }
