@@ -33,13 +33,20 @@ const Home = () => {
     try {
       const response = await analyzeFate(payload);
       
+      // 궁합 분석인 경우 아이템 이름을 자동으로 생성
+      const isCompatibility = payload.images && payload.images.length > 1;
+      const detectedName = isCompatibility 
+        ? "운명적 궁합 분석 (두 기운의 만남)" 
+        : (payload.itemName || "이름 없는 제물");
+
       // 결과 데이터 구조화
       const analysisData = {
         fate: response.result_text,
         fortune_score: response.fortune_score,
         lucky_color: response.lucky_color,
         lucky_item: response.lucky_item,
-        imageUrl: imageUrl
+        imageUrl: imageUrl,
+        itemName: detectedName // 아이템 이름 추가
       };
       
       setResult(analysisData);
@@ -49,12 +56,12 @@ const Home = () => {
           await addDoc(collection(db, "fates"), {
             userId: auth.currentUser.uid,
             userEmail: auth.currentUser.email,
-            itemName: payload.itemName || (payload.images.length > 1 ? "궁합 분석" : "이름 없는 제물"),
+            itemName: detectedName,
             fate: analysisData.fate,
             fortune_score: analysisData.fortune_score,
             lucky_color: analysisData.lucky_color,
             lucky_item: analysisData.lucky_item,
-            imageUrl: imageUrl, // 참고: 실제 운영 환경에선 Firebase Storage 주소를 써야 함
+            imageUrl: imageUrl,
             isMember: payload.isMember,
             createdAt: serverTimestamp()
           });
