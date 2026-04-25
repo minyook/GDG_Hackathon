@@ -1,17 +1,18 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
-// TODO: 파이어베이스 콘솔에서 프로젝트 설정 정보를 복사하여 아래를 교체하십시오.
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyDrotj0zf01CLhJ4mYhf9lClMgIHeS0LG0",
+  authDomain: "destiny-scanner-494400.firebaseapp.com",
+  projectId: "destiny-scanner-494400",
+  storageBucket: "destiny-scanner-494400.firebasestorage.app",
+  messagingSenderId: "14432417743",
+  appId: "1:14432417743:web:16e8c64f8a519fe1e444ba",
+  measurementId: "G-YW6XLZTYP2"
 };
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
+export const googleProvider = new GoogleAuthProvider();
 export const db = getFirestore(app);

@@ -17,7 +17,7 @@ const UploadZone = ({ onUpload }) => {
   };
 
   return (
-    <div className="flex flex-col items-center w-full max-w-lg space-y-8 animate-float">
+    <div className="flex flex-col items-center w-full max-w-2xl space-y-8">
       {/* 사진 업로드 버튼 */}
       <div className="relative group cursor-pointer" onClick={() => document.getElementById('file-upload').click()}>
         <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-yellow-500 rounded-full blur opacity-40 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-pulse-glow"></div>
