@@ -13,6 +13,10 @@ const UploadZone = ({ onUpload }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!selectedFile) {
+      alert("제물(사진)을 먼저 바쳐야 합니다!");
+      return;
+    }
     onUpload({ itemName, birthDate, imageFile: selectedFile });
   };
 

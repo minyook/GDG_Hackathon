@@ -58,37 +58,67 @@ const ResultSection = ({ result, onReset }) => {
       {/* 수치 시각화 및 처방 섹션 */}
       <div className={`grid md:grid-cols-2 gap-6 w-full transition-all duration-1000 transform ${typedResult.length > 5 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
         
-        {/* 1. 영적 에너지 게이지 */}
-        <div className="bg-gray-900/60 border border-purple-900/30 p-6 rounded-3xl flex flex-col items-center justify-center shadow-lg">
-          <h3 className="text-purple-400 text-[10px] font-bold mb-4 tracking-widest uppercase">Spirit Energy Score</h3>
-          <div className="relative w-28 h-28">
-            <svg className="w-full h-full transform -rotate-90">
-              <circle cx="56" cy="56" r="45" stroke="currentColor" strokeWidth="6" fill="transparent" className="text-gray-800" />
-              <circle 
-                cx="56" cy="56" r="45" stroke="currentColor" strokeWidth="6" fill="transparent" 
-                className="text-yellow-500 transition-all duration-[2000ms] ease-out"
-                strokeDasharray="283"
-                strokeDashoffset={isFinished ? strokeDashoffset : 283}
-                strokeLinecap="round"
-              />
+        {/* 1. 영적 에너지 게이지 & 그래프 */}
+        <div className="bg-gray-900/60 border border-purple-900/30 p-6 rounded-3xl flex flex-col items-center justify-center shadow-lg relative overflow-hidden">
+          <div className="absolute top-0 right-0 p-2 opacity-10">
+            <svg className="w-20 h-20 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2L1 21h22L12 2zm0 3.45l8.27 14.3H3.73L12 5.45z"/>
             </svg>
-            <div className="absolute inset-0 flex items-center justify-center flex-col">
-              <span className="text-3xl font-black text-white">{result.fortune_score}</span>
-              <span className="text-[8px] text-yellow-600 font-bold uppercase tracking-tighter">Pneuma</span>
+          </div>
+          
+          <h3 className="text-purple-400 text-[11px] font-bold mb-6 tracking-[0.2em] uppercase opacity-80 z-10">Spirit Energy 동기화율</h3>
+          
+          <div className="w-full space-y-6 z-10">
+            {/* 원형 게이지와 수치 */}
+            <div className="flex items-center justify-around">
+              <div className="relative w-24 h-24">
+                <svg className="w-full h-full transform -rotate-90">
+                  <circle cx="48" cy="48" r="40" stroke="currentColor" strokeWidth="6" fill="transparent" className="text-gray-800" />
+                  <circle 
+                    cx="48" cy="48" r="40" stroke="currentColor" strokeWidth="6" fill="transparent" 
+                    className="text-yellow-500 transition-all duration-[2500ms] ease-out"
+                    strokeDasharray="251"
+                    strokeDashoffset={isFinished ? 251 - (251 * result.fortune_score) / 100 : 251}
+                    strokeLinecap="round"
+                  />
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center flex-col">
+                  <span className="text-2xl font-black text-white">{result.fortune_score}</span>
+                  <span className="text-[7px] text-yellow-600 font-bold uppercase">Sync</span>
+                </div>
+              </div>
+
+              <div className="flex-1 ml-6 space-y-2">
+                <div className="flex justify-between text-[10px] text-gray-500 font-mono italic">
+                  <span>UNSTABLE</span>
+                  <span>PERFECT</span>
+                </div>
+                {/* 선형 프로그레스 바 그래프 */}
+                <div className="h-4 w-full bg-gray-800 rounded-full overflow-hidden border border-white/10 shadow-inner">
+                  <div 
+                    className="h-full bg-gradient-to-r from-emerald-600 to-green-400 transition-all duration-[2000ms] ease-out shadow-[0_0_15px_rgba(52,211,153,0.5)]"
+                    style={{ width: `${result.fortune_score}%` }}
+                  ></div>
+                </div>
+                <p className="text-[10px] text-green-400 text-right font-bold tracking-tighter italic mt-1">
+                  * 현재 영적 주파수: {result.fortune_score}% 일치
+                </p>
+              </div>
             </div>
           </div>
         </div>
 
         {/* 2. 도사님의 처방전 */}
-        <div className="bg-gray-900/60 border border-purple-900/30 p-6 rounded-3xl space-y-4 shadow-lg">
-          <h3 className="text-purple-400 text-[10px] font-bold mb-2 tracking-widest text-center uppercase">Divine Prescription</h3>
+        <div className="bg-gray-900/60 border border-purple-900/30 p-6 rounded-3xl space-y-4 shadow-lg relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-purple-500/20 to-transparent"></div>
+          <h3 className="text-purple-400 text-[11px] font-bold mb-2 tracking-[0.2em] text-center uppercase opacity-80">도사님의 영험한 처방</h3>
           <div className="space-y-2">
             <div className="flex justify-between items-center p-3 bg-gray-950/50 rounded-xl border border-purple-500/10">
-              <span className="text-gray-500 text-[10px] font-bold uppercase">길한 색상</span>
+              <span className="text-gray-500 text-[10px] font-bold">길한 색상</span>
               <span className="text-yellow-200 font-bold text-sm">{result.lucky_color}</span>
             </div>
             <div className="flex justify-between items-center p-3 bg-gray-950/50 rounded-xl border border-purple-500/10">
-              <span className="text-gray-500 text-[10px] font-bold uppercase">행운의 물건</span>
+              <span className="text-gray-500 text-[10px] font-bold">행운의 물건</span>
               <span className="text-yellow-200 font-bold text-sm">{result.lucky_item}</span>
             </div>
           </div>
